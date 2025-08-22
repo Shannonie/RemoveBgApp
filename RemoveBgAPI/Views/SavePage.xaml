@@ -1,0 +1,45 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RemoveBgAPI.Views.SavePage"
+             xmlns:model ="clr-namespace:RemoveBgAPI.Models"
+             xmlns:viewModel ="clr-namespace:RemoveBgAPI.ViewModels"
+             x:DataType="viewModel:SavePageViewModel"
+             MaximumWidthRequest="600" MaximumHeightRequest="800"
+             Title="SavePage">
+
+    <ContentPage.Resources>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontFamily" Value="Roboto"/>
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="Margin" Value="10" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*,Auto">
+        <CollectionView VerticalScrollBarVisibility="Always" SelectionMode="None"
+                        ItemsSource="{Binding ResultImgItems}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:ImageItem">
+                    <Frame Padding="10" Margin="5" BorderColor="LightSteelBlue" CornerRadius="5">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                            <Image Grid.Column="0" HeightRequest="200" WidthRequest="150" Aspect="AspectFit"
+                                   Source="{Binding ResultSource}" />
+                            <CheckBox Margin="5" HorizontalOptions="End" VerticalOptions="Start"
+                                IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <HorizontalStackLayout Grid.Row="1" HorizontalOptions="Center">
+            <Button Text="Save All" BackgroundColor="LightCoral" BorderColor='Salmon'
+                    Command="{Binding SaveAllImageCommand}"/>
+            <Button Text="Save Selected" BackgroundColor="DarkSalmon" BorderColor='Coral'
+                    IsEnabled="{Binding IsSelectedButtonEnable}"
+                    Command="{Binding SaveSelectedImageCommand}"/>
+        </HorizontalStackLayout>
+    </Grid>
+    
+</ContentPage>

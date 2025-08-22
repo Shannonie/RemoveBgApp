@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RemoveBgAPI.MainPage"
+             xmlns:model ="clr-namespace:RemoveBgAPI.Models"
+             xmlns:viewModel ="clr-namespace:RemoveBgAPI.ViewModels"
+             x:DataType="viewModel:MainViewModel"
+             MaximumWidthRequest="600" MaximumHeightRequest="800"
+             Title="MainPage">
+    <ContentPage.Resources>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontFamily" Value="Roboto"/>
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="Margin" Value="10" />
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="Image">
+            <Setter Property="HorizontalOptions" Value="Fill"/>
+            <Setter Property="VerticalOptions" Value="Fill" />
+            <Setter Property="Aspect" Value="AspectFit" />
+            <Setter Property="WidthRequest" Value="180" />
+            <Setter Property="HeightRequest" Value="240" />
+        </Style>
+    </ContentPage.Resources>
+    
+    <Grid RowDefinitions="Auto,50,*,Auto">
+        <Button Text="Pick Images" BackgroundColor="DarkSalmon" BorderColor='Coral'
+                Command="{Binding LoadPhotosAndStartProcessCommand}" />
+        
+        <Grid Grid.Row="1">
+            <Grid RowDefinitions="*,*" ColumnDefinitions="*,*">
+                <ActivityIndicator Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="Center"
+                                   Color="LightGrey" WidthRequest="20" HeightRequest="20"
+                                   IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
+                <Label Grid.Row="1" Text="Original Image"
+                       IsVisible="{Binding IsImgLabelsVisible}"/>
+                <Label Grid.Column="1" Grid.Row="1" Text="BG Removed Image"
+                       IsVisible="{Binding IsImgLabelsVisible}"/>
+            </Grid>
+        </Grid>
+        
+        <CollectionView Grid.Row="2" ItemsLayout="VerticalList"
+                        VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                        VerticalScrollBarVisibility="Always" SelectionMode="None"
+                        ItemsSource="{Binding SelectedImages}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:ImageItem">
+                    <Frame Margin="5" Padding="5" HasShadow="True" BorderColor="LightSteelBlue" CornerRadius="5">
+                        <Grid ColumnDefinitions="*,*">
+                            <Image TranslationX="-8" Source="{Binding OriginSource}" />
+                            <Image Grid.Column="1" TranslationX="8" Source="{Binding ResultSource}">
+                                <Image.Triggers>
+                                    <DataTrigger TargetType="Image" Binding="{Binding ResultSource}" Value="{x:Null}">
+                                        <Setter Property="Source" Value="placeholder.png"/>
+                                    </DataTrigger>
+                                </Image.Triggers>
+                            </Image>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Grid.Row="3" Text="Save Images" BackgroundColor="LightCoral" BorderColor='Salmon'
+                Command="{Binding SavePhotosCommand}"
+                IsVisible="{Binding IsSaveButtonVisible}"/>
+    </Grid>
+    
+</ContentPage>
