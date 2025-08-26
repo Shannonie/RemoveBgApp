@@ -2,7 +2,7 @@
 {
     public class RemoveBgService
     {
-        private readonly string apiKey = "zQ4BTKSTKfgc8oYzhXBx9HnF";
+        private readonly string apiKey = "Your_apiKey";
         private readonly HttpClient httpClient;
 
         public RemoveBgService()
